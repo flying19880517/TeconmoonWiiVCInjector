@@ -130,23 +130,6 @@ namespace TeconMoon_s_WiiVC_Injector
             }
             Process.Start(Launcher).WaitForExit();
         }
-        public static bool CheckForInternetConnection()
-        {
-            try
-            {
-                using (var client = new WebClient())
-                {
-                    using (client.OpenRead("http://clients3.google.com/generate_204"))
-                    {
-                        return true;
-                    }
-                }
-            }
-            catch
-            {
-                return false;
-            }
-        }
         public static string GetFullPath(string fileName)
         {
             var values = Environment.GetEnvironmentVariable("PATH");
@@ -1788,33 +1771,12 @@ namespace TeconMoon_s_WiiVC_Injector
             Directory.SetCurrentDirectory(TempToolsPath + "JAR");
             LauncherExeFile = "JNUSTool.exe";
 
-            bool internetPresent = CheckForInternetConnection();
-
             for (int i = 0; i < downloadedFiles.Length; i++)
             {
                 // check if file exists and is correct
                 if (File.Exists(downloadedFiles[i]) && GetMD5Checksum(downloadedFiles[i]) == fileHashes[i])
                 {
                     continue;
-                }
-
-                if (!internetPresent)
-                {
-                    DialogResult dialogResult = MessageBox.Show("Your internet connection could not be verified, do you wish to try and download" +
-                                                                "the necessary base files from Nintendo anyway? (This is a one-time download)"
-                                                                , "Internet Connection Verification Failed"
-                                                                , MessageBoxButtons.YesNo
-                                                                , MessageBoxIcon.Warning
-                                                                , MessageBoxDefaultButton.Button1
-                                                                , (MessageBoxOptions)0x40000);
-                    if (dialogResult == DialogResult.No)
-                    {
-                        MainTabs.Enabled = true;
-                        BuildStatus.Text = "";
-                        BuildStatus.Refresh();
-                        BuildProgress.Value = 0;
-                        goto BuildProcessFin;
-                    }
                 }
 
                 // if not, download it
