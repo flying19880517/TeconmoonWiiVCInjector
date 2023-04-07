@@ -678,7 +678,8 @@ namespace TeconMoon_s_WiiVC_Injector
                         reader.BaseStream.Position = 0x218;
                         GameType = reader.ReadInt64();
                         TempString = "";
-                        reader.BaseStream.Position = 0x220;
+                        // TODO sometime read error, just use 0x200020. reader.BaseStream.Position = 0x220;
+                        reader.BaseStream.Position = 0x200020;
                         while ((int)(TempChar = reader.ReadChar()) != 0) TempString = TempString + TempChar;
                         InternalGameName = TempString;
                         TempString = "";
